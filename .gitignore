@@ -33,3 +33,7 @@ temp/
 
 # Archives volumineuses
 *.zip
+
+# Local reports and exported diagnostics
+reports/
+docker/sortie_*.txt

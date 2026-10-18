@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./postgres/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  minio:
+    image: bitnamilegacy/minio:2025.7.23-debian-12-r5
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BROWSER: "on"
+      MINIO_API_PORT_NUMBER: "9000"
+      MINIO_CONSOLE_PORT_NUMBER: "9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  iceberg-rest:
+    image: tabulario/iceberg-rest:latest
+    depends_on:
+      - postgres
+      - minio
+    environment:
+      CATALOG_WAREHOUSE: ${CATALOG_WAREHOUSE}
+      CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
+      CATALOG_S3_ENDPOINT: ${MINIO_ENDPOINT}
+      CATALOG_S3_PATH__STYLE__ACCESS: "true"
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      AWS_REGION: us-east-1
+      CATALOG_URI: ${CATALOG_URI}
+      CATALOG_JDBC_USER: ${CATALOG_JDBC_USER}
+      CATALOG_JDBC_PASSWORD: ${CATALOG_JDBC_PASSWORD}
+      CATALOG_CATALOG__IMPL: org.apache.iceberg.jdbc.JdbcCatalog
+    ports:
+      - "8181:8181"
+
+  spark:
+    build:
+      context: ./spark
+    depends_on:
+      - iceberg-rest
+    volumes:
+      - ../spark:/opt/app/spark
+      - ../data:/opt/app/data
+      - ../config:/opt/app/config
+    # Pas de commande par défaut : on lancera les jobs avec
+    # `docker compose run spark spark-submit ...`
+    tty: true
+
+  airflow-webserver:
+    build:
+      context: ./airflow
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW_UID: ${AIRFLOW_UID}
+      AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW__DATABASE__SQL_ALCHEMY_CONN}
+      AIRFLOW__CORE__LOAD_EXAMPLES: ${AIRFLOW__CORE__LOAD_EXAMPLES}
+    volumes:
+      - ../airflow/dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "airflow db init &&
+      airflow users create --username admin --password admin --firstname a --lastname b --role Admin --email a@b.com || true &&
+      airflow webserver"
+
+  airflow-scheduler:
+    build:
+      context: ./airflow
+    depends_on:
+      - airflow-webserver
+    environment:
+      AIRFLOW_UID: ${AIRFLOW_UID}
+      AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW__DATABASE__SQL_ALCHEMY_CONN}
+    volumes:
+      - ../airflow/dags:/opt/airflow/dags
+    command: airflow scheduler
+
+volumes:
+  pg_data:
+  minio_data:

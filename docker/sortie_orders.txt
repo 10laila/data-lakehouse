@@ -1,0 +1,534 @@
+﻿docker : time="2026-10-13T09:11:14Z" level=warning 
+msg="C:\\Users\\laila\\OneDrive\\Desktop\\data-lakehouse\\docker\\docker-compose.yml: the 
+attribute `version` is obsolete, it will be ignored, please remove it to avoid potential 
+confusion"
+Au caractère Ligne:1 : 1
++ docker compose run --rm spark spark-submit --driver-memory 2g /opt/ap ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (time="2026-10-1...tial confusion":String) [], Remot 
+   eException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ Container docker-postgres-1 Running 
+ Container docker-minio-1 Running 
+ Container docker-iceberg-rest-1 Running 
+ Container docker-spark-run-9255c0ed13a5 Creating 
+ Container docker-spark-run-9255c0ed13a5 Created 
+[38;5;6mspark [38;5;5m09:11:16.36 [0m[38;5;2mINFO [0m ==> 
+[38;5;6mspark [38;5;5m09:11:16.36 [0m[38;5;2mINFO [0m ==> [1mWelcome to the Bitnami spark 
+container[0m
+[38;5;6mspark [38;5;5m09:11:16.36 [0m[38;5;2mINFO [0m ==> Subscribe to project updates by 
+watching [1mhttps://github.com/bitnami/containers[0m
+[38;5;6mspark [38;5;5m09:11:16.36 [0m[38;5;2mINFO [0m ==> Did you know there are enterprise 
+versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited 
+pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu 
+Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami/ for more 
+information.
+[38;5;6mspark [38;5;5m09:11:16.36 [0m[38;5;2mINFO [0m ==> 
+
+26/10/13 09:11:20 INFO SparkContext: Running Spark version 3.5.6
+26/10/13 09:11:20 INFO SparkContext: OS info Linux, 6.18.33.2-microsoft-standard-WSL2, amd64
+26/10/13 09:11:20 INFO SparkContext: Java version 17.0.15
+26/10/13 09:11:20 INFO ResourceUtils: 
+==============================================================
+26/10/13 09:11:20 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/10/13 09:11:20 INFO ResourceUtils: 
+==============================================================
+26/10/13 09:11:20 INFO SparkContext: Submitted application: explore_orders
+26/10/13 09:11:20 INFO ResourceProfile: Default ResourceProfile created, executor resources: 
+Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, 
+script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: 
+Map(cpus -> name: cpus, amount: 1.0)
+26/10/13 09:11:20 INFO ResourceProfile: Limiting resource is cpu
+26/10/13 09:11:20 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/10/13 09:11:20 INFO SecurityManager: Changing view acls to: root,spark
+26/10/13 09:11:20 INFO SecurityManager: Changing modify acls to: root,spark
+26/10/13 09:11:20 INFO SecurityManager: Changing view acls groups to: 
+26/10/13 09:11:20 INFO SecurityManager: Changing modify acls groups to: 
+26/10/13 09:11:20 INFO SecurityManager: SecurityManager: authentication disabled; ui acls 
+disabled; users with view permissions: root, spark; groups with view permissions: EMPTY; users 
+with modify permissions: root, spark; groups with modify permissions: EMPTY
+26/10/13 09:11:20 WARN NativeCodeLoader: Unable to load native-hadoop library for your 
+platform... using builtin-java classes where applicable
+26/10/13 09:11:20 INFO Utils: Successfully started service 'sparkDriver' on port 34609.
+26/10/13 09:11:20 INFO SparkEnv: Registering MapOutputTracker
+26/10/13 09:11:20 INFO SparkEnv: Registering BlockManagerMaster
+26/10/13 09:11:20 INFO BlockManagerMasterEndpoint: Using 
+org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/10/13 09:11:20 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/10/13 09:11:20 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/10/13 09:11:20 INFO DiskBlockManager: Created local directory at 
+/tmp/blockmgr-8a384bf5-0cdf-457d-ac8c-4627ac8adfb6
+26/10/13 09:11:20 INFO MemoryStore: MemoryStore started with capacity 1048.8 MiB
+26/10/13 09:11:20 INFO SparkEnv: Registering OutputCommitCoordinator
+26/10/13 09:11:21 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+26/10/13 09:11:21 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/10/13 09:11:21 INFO Executor: Starting executor ID driver on host 872b50153b58
+26/10/13 09:11:21 INFO Executor: OS info Linux, 6.18.33.2-microsoft-standard-WSL2, amd64
+26/10/13 09:11:21 INFO Executor: Java version 17.0.15
+26/10/13 09:11:21 INFO Executor: Starting executor with user classpath (userClassPathFirst = 
+false): ''
+26/10/13 09:11:21 INFO Executor: Created or updated repl class loader 
+org.apache.spark.util.MutableURLClassLoader@61c6a9a8 for default.
+26/10/13 09:11:21 INFO Utils: Successfully started service 
+'org.apache.spark.network.netty.NettyBlockTransferService' on port 36085.
+26/10/13 09:11:21 INFO NettyBlockTransferService: Server created on 872b50153b58:36085
+26/10/13 09:11:21 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy 
+for block replication policy
+26/10/13 09:11:21 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 
+872b50153b58, 36085, None)
+26/10/13 09:11:21 INFO BlockManagerMasterEndpoint: Registering block manager 872b50153b58:36085 
+with 1048.8 MiB RAM, BlockManagerId(driver, 872b50153b58, 36085, None)
+26/10/13 09:11:21 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 
+872b50153b58, 36085, None)
+26/10/13 09:11:21 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 
+872b50153b58, 36085, None)
+Nombre de lignes   : 300000
+Nombre de colonnes : 10
+root
+ |-- order_id: string (nullable = true)
+ |-- customer_id: string (nullable = true)
+ |-- product_id: string (nullable = true)
+ |-- order_amount: string (nullable = true)
+ |-- order_date: string (nullable = true)
+ |-- payment_method: string (nullable = true)
+ |-- status: string (nullable = true)
+ |-- quantity: string (nullable = true)
+ |-- _ingested_at: timestamp (nullable = true)
+ |-- _source_file: string (nullable = true)
+
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+--------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date                |payment_method|status  |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+--------+--------+--------------------------+------------------------------------------+
+|06b5aa88-f86f-4e07-8e4b-6df36402c209|0a331d4c-a73d-4271-83ac-2f6726635495|PROD-0060 |473.82      |2025-07-29                |wall-et       |success |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5b10b856-e084-471c-bc16-8dbab95e3f33|9e48263f-7923-4cb9-8138-b9da8eb85619|PROD-0393 |17796.32    |2024/31/01                |card          |success |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|88706122-160e-4721-b537-73cee232fcd5|245fac1f-5ac1-4448-acc9-70ff980a4e9b|PROD-0332 |31201.75    |2024-03-02                |wallet        |success |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c6ae75af-0313-4194-a788-8802515af2e4|abfda25e-6a38-4aa8-be24-cd22f371b2b0|PROD-0059 |42282.89    |NULL                      |wallet        |refunded|2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|032ab1c7-8882-47d8-a2ac-fbefc1cfb2eb|e0010492-b072-4f48-abd6-8a87938fad24|PROD-0342 |27100.3     |2024-02-11                |wallet        |success |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|0f2433b5-1f67-4446-9849-edff493026c2|bdf18b4d-db9f-46f0-8758-44a938529a49|PROD-0297 |2393.67     |2025-11-09                |card          |success |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|71223631-9926-4ced-b994-60a6d97d1001|5380805b-1e8f-434c-a898-bfe678c2ea7a|PROD-0137 |12532.69    |2025-12-01                |upi           |success |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4acbdb89-3acd-40ff-ab86-87af982fcca8|a4bc8fc9-f452-43b3-a4c1-eaf7cec182ae|PROD-0010 |47079.63    |2025-08-20                |card          |success |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|cc6dcafa-a53f-4be5-aee3-ec29d5994f0d|d7e5abd4-33ab-404f-adc1-de28fb6756ae|PROD-0243 |32901.99    |2025-02-27                |upi           | FAILED |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|184ee64a-b795-4137-868f-9a90c6580ba2|b6a71ba1-8f4b-4f82-a131-c987879c104d|PROD-0084 |3858.55     |2023-12-30                |upi           |success |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|2ec9aced-a816-43b7-b4df-d27b8897f3a4|48608d73-d5fc-4c66-a43b-9dfc6e67e203|PROD-0490 |26531.19    |2025-05-07                |cash          |success |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9cd401b4-4a78-476b-906d-b15ffe5910b0|4111ec1f-523e-44ab-905c-df3d4f13f112|PROD-0340 | 40344.97   |2025-05-24                |upi           |suc     |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|8fc20b6f-fbd2-4d34-b935-ae0e375aad80|9186ed0d-0297-4355-ae7f-a332ce8fd46f|PROD-0399 |41711.08    |2025/01/10 12:00          |card          |SUCCESS |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9b1262e3-96a0-4aa8-9721-babbd152901d|a802e40f-7a9f-45ee-a2f3-badd3ed1fe46|PROD-0175 |29184.75    |2024-02-17                |CRAD          |success |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|41565f0b-d0b8-4b2b-b7f5-f6f32d0d190e|b0664d8e-a592-41e7-8a5a-41a46eb9cb38|PROD-0452 |8581.57     |2025-07-20                |wallet        |success |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4b5d74d1-91f1-47e8-b0d2-9a68fe92341e|5b8f9a1d-b658-400d-b96a-271150f6c8bf|PROD-0214 |-50         |2026-12-20T15:18:00.441995|card          |refunded|        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f2c4328c-a2b6-4714-9e98-8aace7189533|26392abf-8cc1-4288-b0f8-eba720f7bff3|PROD-0193 |40904.93    |2024-06-03                |cash          |success |0       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|7d0f581d-dfbc-49ac-b0f7-ad7a6ed6b7ef|486810a0-2f8f-43c9-ae73-1c0bd9a9815e|PROD-0360 |35036.68    |2023-12-16                |upi           |success |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|84a34bc6-02af-4949-ac03-1f72731f7881|a58d0abc-c79e-4a7d-8b55-95eca158e786|PROD-0435 |-50         |2024/31/01                |cash          |success |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c799fc4a-b269-47c7-85f8-295a19f7a975|9a845211-d346-4e65-ac7c-9fb6f91a72dc|PROD-0037 |4016.76     |NULL                      |upi           |success |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+--------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+--- Valeurs manquantes par colonne ---
+order_id            0
+customer_id         0
+product_id          0
+order_amount        0
+order_date          17914
+payment_method      0
+status              0
+quantity            15050
+_ingested_at        0
+_source_file        0
+
+--- Valeurs de payment_method (top 50) ---
++--------------+-----+
+|payment_method|count|
++--------------+-----+
+|cash          |56446|
+|wallet        |56364|
+|card          |56174|
+|upi           |56016|
+|CRAD          |10850|
+| upi          |10822|
+|UPI           |10731|
+|WALLET        |10696|
+|c@rd          |10684|
+|wall-et       |10631|
+|cd            |10586|
++--------------+-----+
+
+
+--- Valeurs de status (top 50) ---
++---------+------+
+|status   |count |
++---------+------+
+|success  |182599|
+|refunded |16990 |
+|SUCCESS  |12955 |
+|refunded |12936 |
+|REF      |12901 |
+|suc      |12874 |
+|Success  |12852 |
+|fail     |12760 |
+| FAILED  |12722 |
+|failed   |10411 |
++---------+------+
+
+
+--- Valeurs de quantity (top 50) ---
++--------+-----+
+|quantity|count|
++--------+-----+
+|3       |45296|
+|2       |45234|
+|4       |45058|
+|1       |44765|
+|5       |44647|
+|five    |15097|
+|        |15050|
+|2.0     |15036|
+|-3      |14939|
+|0       |14878|
++--------+-----+
+
+
+--- Valeurs de order_date (top 50) ---
++----------------+-----+
+|order_date      |count|
++----------------+-----+
+|2024/31/01      |18110|
+|31-12-2023      |18050|
+|2025/01/10 12:00|17952|
+|NULL            |17914|
+|2025-03-15      |343  |
+|2024-11-01      |334  |
+|2024-10-16      |331  |
+|2024-05-12      |330  |
+|2025-09-07      |329  |
+|2024-02-02      |327  |
+|2024-06-23      |326  |
+|2023-12-16      |326  |
+|2025-07-28      |325  |
+|2024-03-17      |324  |
+|2025-07-23      |324  |
+|2024-08-03      |324  |
+|2024-01-12      |321  |
+|2024-04-18      |321  |
+|2024-04-16      |320  |
+|2024-04-02      |320  |
+|2025-02-16      |320  |
+|2024-05-23      |320  |
+|2025-01-16      |320  |
+|2024-01-21      |320  |
+|2024-11-25      |320  |
+|2024-01-10      |319  |
+|2025-05-02      |319  |
+|2024-03-21      |319  |
+|2025-07-31      |319  |
+|2024-07-21      |319  |
+|2025-08-17      |318  |
+|2024-02-17      |318  |
+|2025-01-17      |318  |
+|2024-08-23      |317  |
+|2025-10-03      |317  |
+|2024-08-13      |316  |
+|2025-01-28      |316  |
+|2024-01-28      |316  |
+|2025-10-08      |316  |
+|2025-11-05      |315  |
+|2024-09-04      |315  |
+|2025-04-03      |315  |
+|2025-01-20      |315  |
+|2025-03-14      |314  |
+|2025-11-22      |314  |
+|2025-03-08      |314  |
+|2025-10-09      |314  |
+|2025-10-04      |314  |
+|2024-12-15      |313  |
+|2025-11-14      |313  |
++----------------+-----+
+only showing top 50 rows
+
+
+--- Valeurs de order_amount (top 50) ---
++------------+-----+
+|order_amount|count|
++------------+-----+
+|0           |12988|
+|1,200       |12897|
+|NaN         |12830|
+|-50         |12810|
+|23729.01    |3    |
+|20849.09    |3    |
+|28693.72    |3    |
+|42698.04    |3    |
+|49120.61    |3    |
+|32959.62    |3    |
+|13914.63    |3    |
+|10269.38    |3    |
+|4398.69     |3    |
+|45157.29    |3    |
+|40237.93    |3    |
+|267.22      |3    |
+|27754.58    |3    |
+|6675.08     |3    |
+|41528.3     |3    |
+|20391.68    |3    |
+|2202.78     |3    |
+|6586.83     |3    |
+|47354.0     |3    |
+|44011.04    |3    |
+|44527.77    |3    |
+|11216.0     |3    |
+|45672.96    |3    |
+|35380.28    |3    |
+|1332.86     |3    |
+|2350.77     |3    |
+|20842.22    |3    |
+|30910.96    |3    |
+|30116.5     |3    |
+|44105.22    |3    |
+|42542.79    |3    |
+|24817.78    |3    |
+|19962.01    |3    |
+|19733.26    |3    |
+|3218.24     |3    |
+|40493.17    |3    |
+|34259.96    |3    |
+|21155.28    |3    |
+|11762.38    |3    |
+|21481.09    |3    |
+|7534.08     |3    |
+|9333.69     |3    |
+|14105.32    |3    |
+|9577.37     |3    |
+|5684.81     |3    |
+|16762.68    |3    |
++------------+-----+
+only showing top 50 rows
+
+
+--- order_amount : les 10 plus petites valeurs num├®riques ---
++------------+
+|order_amount|
++------------+
+|-50         |
+|-50         |
+|-50         |
+|-50         |
+|-50         |
+|-50         |
+|-50         |
+|-50         |
+|-50         |
+|-50         |
++------------+
+only showing top 10 rows
+
+
+--- order_amount : les 10 plus grandes valeurs num├®riques ---
++------------+
+|order_amount|
++------------+
+|999969.87   |
+|999813.7    |
+|999812.56   |
+|999763.22   |
+|999639.84   |
+|999566.12   |
+|999538.66   |
+|999499.48   |
+|999400.58   |
+|999341.62   |
++------------+
+only showing top 10 rows
+
+
+----- condition : Column<'(NOT (lower(trim(payment_method)) IN (cash, wallet, upi, card)))'> ---> 42751 lignes -----
++------------------------------------+------------------------------------+----------+------------+----------+--------------+-------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date|payment_method|status |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+----------+--------------+-------+--------+--------------------------+------------------------------------------+
+|06b5aa88-f86f-4e07-8e4b-6df36402c209|0a331d4c-a73d-4271-83ac-2f6726635495|PROD-0060 |473.82      |2025-07-29|wall-et       |success|1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9b1262e3-96a0-4aa8-9721-babbd152901d|a802e40f-7a9f-45ee-a2f3-badd3ed1fe46|PROD-0175 |29184.75    |2024-02-17|CRAD          |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a025a60c-13bc-40b6-ac66-2f656328fe8a|88468d69-d883-49b3-ae7f-32eeb20c81aa|PROD-0484 |NaN         |2024-08-27|CRAD          |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c6887c12-89f8-4ecc-920a-d3b967bcae05|9bc80a14-6919-496b-8154-081cf41ab21b|PROD-0145 |29615.98    |2024-12-15|cd            |SUCCESS|0       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a2376264-d6be-45d2-b2e2-8b41e0ea824a|141ad63a-c1a9-43ad-8ff1-b36f167080d5|PROD-0349 | 34334.22   |2025-05-04|c@rd          |fail   |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|8ce241ff-adb4-4ae3-b475-d02a53478760|75d45486-96d4-4dca-a9e2-ebb2adb903a5|PROD-0300 |-50         |2025-01-06|CRAD          |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|34d2abd2-ecad-46b8-861f-7dc2566b2894|fb458935-2431-4665-bfaf-2520940693a2|PROD-0496 |48635.04    |2025-10-13|cd            |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|ff70a55d-a3b5-4b15-b3ae-f33a52c7131c|45fd0c64-f2df-4ced-a17d-24dfb7b84410|PROD-0495 |40891.48    |2024-03-24|cd            |success|1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|49d85432-3510-41b5-989a-338845743cc2|b4d7f97a-1ec3-495f-988e-4600570e0cc9|PROD-0305 |10334.38    |2024-04-01|CRAD          |success|3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e83bbeb3-85d6-4a0c-96f3-f87cbcd11044|142df004-ac5f-4222-bf37-f772ddbbcc6a|PROD-0111 |5485.05     |31-12-2023|wall-et       |success|2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4d8cb7c1-98d0-49bf-82a7-c7e5fb647c2b|1535ea2c-8eed-4be3-a86c-99347d38372c|PROD-0035 |4298.06     |2024-12-06|CRAD          | FAILED|five    |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|be8a2c71-2a1e-4b75-bb87-bf6cc0af96d2|2b8adb23-d7d7-460f-852c-55220a20a4c8|PROD-0199 |17817.5     |31-12-2023|c@rd          |success|-3      |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|efcbf2a7-bacc-4e41-8b2f-dd588d02b1e0|42e7f5ce-8c61-4222-add0-edfc787bcce9|PROD-0020 |268321.58   |2025-01-09|wall-et       |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|6ece1766-904a-4e51-bd6d-7d1e6001f75c|ff005d97-896f-4bb2-8c8c-dfaac7782bd3|PROD-0346 |14162.3     |2024-03-08|CRAD          |success|3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9ea1fa57-4064-457e-9560-573fa12c3804|ea08f560-1bbf-4d53-ba06-deff990406d4|PROD-0142 |22587.7     |2024-03-04|c@rd          |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5a899f66-87d9-468b-bb39-871c4df270d7|660712ff-b4bc-422f-8041-827149a004fb|PROD-0166 |1,200       |NULL      |cd            |success|1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|34fd6941-d6be-4a91-9a3a-b2bc52534a68|4257f65d-82a9-4e75-ac93-c6d8006dc3cf|PROD-0004 |20382.83    |2024-02-25|wall-et       |success|0       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|ceb8cf5d-c787-49c8-bd8e-d2cc7bdb055d|399487d1-f9c0-4ae2-9227-300ae3eec148|PROD-0350 | 41158.74   |2025-08-23|CRAD          |success|1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|8fe4f485-af28-42d6-9c2d-94b6bb18a2f4|7f9e718b-7bc9-4956-b622-f75fc18fee1b|PROD-0143 |25364.18    |2024-04-03|c@rd          |success|3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a4938816-3eee-4b09-ac96-6196a860d364|6def3a4d-fa47-4d15-b1af-d9ff2b5bb5ed|PROD-0372 |-50         |2024-04-01|cd            |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+----------+--------------+-------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+----- condition : Column<'(NOT (lower(trim(status)) IN (success, refunded, failed)))'> ---> 38535 lignes -----
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date                |payment_method|status|quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+------+--------+--------------------------+------------------------------------------+
+|9cd401b4-4a78-476b-906d-b15ffe5910b0|4111ec1f-523e-44ab-905c-df3d4f13f112|PROD-0340 | 40344.97   |2025-05-24                |upi           |suc   |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c4e7f68f-8253-4411-9a96-08a69ee37514|382c87fe-09d6-455f-a5b0-d292796c3a0d|PROD-0142 |26337.45    |2024-02-29                |wallet        |REF   |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|6a36a183-7803-47e0-be37-09ee275863a2|c49c0330-1eda-40bc-bdcc-0ad86fc8ddda|PROD-0429 |29416.72    |2025/01/10 12:00          |card          |suc   |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|ac941687-f113-4c50-8e91-1d8e080a46d0|11fe5a9a-06c6-48ce-a453-5bf2051ddc43|PROD-0410 |-50         |2024-06-14                |UPI           |suc   |2.0     |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a2376264-d6be-45d2-b2e2-8b41e0ea824a|141ad63a-c1a9-43ad-8ff1-b36f167080d5|PROD-0349 | 34334.22   |2025-05-04                |c@rd          |fail  |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e7fa1cd5-c1e3-471c-8f82-ba452054ce01|46b65227-230e-4128-9b1b-593a9c21df85|PROD-0100 |25507.16    |2025-01-26                |cash          |fail  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|cdf39e31-0fa4-463b-8c9d-de486e7bbb76|af197364-9271-43f9-a003-fb122066b96d|PROD-0465 |3542.94     |2024/31/01                |cash          |suc   |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|57870561-66c0-4418-a4b2-f6f4973f4392|4ba33e85-2f6c-4f72-a3ce-78ecca60c8d6|PROD-0113 | 17452.58   |2024-02-10                |card          |fail  |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e5900855-461a-4488-9e08-c3a553045b9a|2613d5d8-efc3-41b9-90e3-6d4b1cec2105|PROD-0035 |-50         |2024-01-07                |WALLET        |suc   |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a14937bf-1680-4a35-a341-a58105f9a095|cfe17da1-2e94-4702-8da8-ce6dd95899c0|PROD-0249 |33878.18    |2024-12-10                |upi           |REF   |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|66dc71b0-e4d5-4d45-b182-02a6524a79b8|7ddd54fe-9d60-45ef-add4-6560ea3f65f1|PROD-0276 |9276.56     |31-12-2023                |WALLET        |REF   |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9ecca26e-37ce-4d87-9ba4-b58fdc90761f|458511cf-48f9-46b9-aaf4-64bdd4af2a39|PROD-0217 |24889.86    |2024-11-19                |cash          |REF   |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|840facbe-feaa-42f2-9bbd-36af81166b93|c05dfa53-3ffe-493f-81f1-64c0bc084965|PROD-0439 | 37986.22   |2024-07-04                | upi          |fail  |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|3966e2aa-932b-425e-9afc-fd7589a81d2f|3d100e99-aa92-4a1e-820a-2088aba49771|PROD-0458 |575.81      |2024/31/01                |cash          |REF   |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|69a24e57-c595-419b-be42-7343ba445375|476f971c-7871-4853-a8cc-8035a529e6bc|PROD-0428 |30733.27    |2026-01-15T15:18:03.200248|cash          |REF   |five    |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e3d503fa-36cb-45d7-bdca-b4ee3e546510|86ad6beb-476d-4d79-bfb6-0f989b8c2c8a|PROD-0043 |25206.65    |2026-03-13T15:18:00.599863|wallet        |fail  |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|bc495c52-3c47-4eef-8958-8a4da32350d9|de05aa36-726a-49f0-9bab-4d4d8054777c|PROD-0086 |7833.61     |2025/01/10 12:00          |wallet        |fail  |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5b07ad2a-5049-4071-a56b-957001f77efd|132b3f00-7152-46fd-bf99-67aca7d7a5fa|PROD-0422 |0           |2026-04-30T15:18:01.386597|upi           |fail  |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d37bc222-0bdb-49ee-af63-9479ab2cc8bd|4376ab24-b6f8-4fd7-96b4-322d27119d19|PROD-0389 |33108.96    |2025/01/10 12:00          |wallet        |REF   |-3      |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|1c0bda0e-7a1c-41a1-b241-d07ed907b1e2|a8d5f4cd-fb45-4ae3-962b-e8f56d42aa95|PROD-0285 |39222.17    |2025-05-31                |card          |fail  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+----- condition : Column<'(trim(quantity) = )'> ---> 15050 lignes -----
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+---------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date                |payment_method|status   |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+---------+--------+--------------------------+------------------------------------------+
+|9cd401b4-4a78-476b-906d-b15ffe5910b0|4111ec1f-523e-44ab-905c-df3d4f13f112|PROD-0340 | 40344.97   |2025-05-24                |upi           |suc      |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4b5d74d1-91f1-47e8-b0d2-9a68fe92341e|5b8f9a1d-b658-400d-b96a-271150f6c8bf|PROD-0214 |-50         |2026-12-20T15:18:00.441995|card          |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f833258c-c478-4316-99fe-5e9491de9d91|6ed274d7-d2aa-4ff6-84e4-80cecb4667a2|PROD-0235 |40208.72    |2025/01/10 12:00          |wallet        |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c341e859-92f5-4a62-93be-be9cb34f6a1d|6f38f29a-a92d-4b33-b4e8-9adc4e2b3600|PROD-0413 |1,200       |2024/31/01                |UPI           |Success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5cc38665-71e5-44ce-a42e-0421eb9e66db|f7b5d913-9741-47e9-9339-edaa5314c370|PROD-0428 |29045.22    |2024-12-31                |card          |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|87fea634-c9ec-4b86-8181-43ca8f804ed8|0b41cd47-b9f4-4871-ae16-c1ac9ab428ec|PROD-0491 |27303.79    |2024/31/01                |cash          |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a89e5e2e-cad1-4f4a-825f-87d7f5fd33ec|332bb466-b414-4cb8-9156-32464e7b7d76|PROD-0109 |4485.36     |2026-06-28T15:18:00.536834| upi          |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c7d63b1a-a25f-46c2-9647-80973990d45a|c0bcdcaa-4688-4d7f-9794-d9b60f4bdf95|PROD-0363 |21227.02    |2025-10-17                |wallet        |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|6ebfa231-a847-441f-965b-238d6552b324|1f56f60c-58b6-4423-8e69-77bc73d04bdc|PROD-0086 |9335.7      |2024-06-18                |card          |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4266cff4-0496-47dd-a792-1082126ec454|c7edbde6-e9e2-49ec-b466-39414cd37a50|PROD-0115 |22286.3     |2024-02-01                |wallet        |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|27ad71ce-d974-4b45-8658-d4f9809ca7fa|d2ff8d9a-8cbf-4f12-a15b-2464843da483|PROD-0098 |9816.62     |2024-06-19                |upi           |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|8b8eb2ef-4b8c-464b-9ff3-730734d43606|0dc98dbb-6a3d-4386-a18a-24a02c7a6e1c|PROD-0363 |34247.66    |2025-12-26T15:18:02.407144|cash          |SUCCESS  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|565ec62c-1fc6-4579-bdd7-ab78bce857f3|223cbe82-e3bc-423e-8921-f470afe011af|PROD-0295 |12763.32    |2025/01/10 12:00          |cash          |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f08ce7cb-0e68-40e7-8069-1f0105a01ce6|a25916e3-6790-480e-95ea-d566f59388e0|PROD-0368 | 30336.92   |2025/01/10 12:00          |upi           |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|af5e692a-03a1-4bbe-929a-c56568536c80|3d7f0d3c-f62d-4bac-9f96-5a41677311b2|PROD-0272 |27460.81    |2025-05-05                |cash          |SUCCESS  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f2d5ac38-bd11-48e2-97e5-ab0bfe437903|9000fd41-4ef9-4997-b46b-ecce25612503|PROD-0068 | 7359.1     |2025-08-14                |cash          |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|dae2fb40-6d5b-4445-a7cc-5e397b62fd6e|fc9baace-4866-4261-a348-eca80fdeba15|PROD-0065 | 24778.92   |2025/01/10 12:00          |wallet        |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|cc13fa2c-0c1a-451e-a55d-cb925357d8f9|febb86ae-e179-45e4-8f36-b30698e2d2ed|PROD-0185 |16444.22    |2024-08-16                |cash          |success  |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|6796817e-e9b9-47b3-882e-dd46c1acd2d7|9d90df4a-95b0-407a-818d-9b20aeebaf9c|PROD-0305 |43314.13    |2025-11-11                |cash          |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|2a0aaf68-db23-41e2-8b89-2dc037a7b422|8d9bf1ad-c882-4470-ad0f-bc37e982ee00|PROD-0038 |12517.65    |31-12-2023                |card          |refunded |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+---------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+----- condition : Column<'(order_date IS NULL)'> ---> 17914 lignes -----
++------------------------------------+------------------------------------+----------+------------+----------+--------------+---------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date|payment_method|status   |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+----------+--------------+---------+--------+--------------------------+------------------------------------------+
+|c6ae75af-0313-4194-a788-8802515af2e4|abfda25e-6a38-4aa8-be24-cd22f371b2b0|PROD-0059 |42282.89    |NULL      |wallet        |refunded |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c799fc4a-b269-47c7-85f8-295a19f7a975|9a845211-d346-4e65-ac7c-9fb6f91a72dc|PROD-0037 |4016.76     |NULL      |upi           |success  |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e99d8583-1324-4d35-a01e-e8b1cb4759c7|654d9af4-07a1-412f-90a6-a11c793d9854|PROD-0470 |7086.88     |NULL      |cash          |failed   |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|ff59e27d-fb55-440a-bab0-f84b66cca463|f763c6db-4ff0-4075-9707-6e06899151a4|PROD-0071 |43541.61    |NULL      | upi          |success  |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|78bc5c3b-6aaa-4631-aee6-3e70d6a7cac1|e9a198e1-d807-43ce-84c6-cc4dc1b81225|PROD-0391 |42042.48    |NULL      |wallet        |refunded |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9c18edcd-baea-4106-8a73-9f5e2a79595c|a513f8b3-7b43-4b79-af5e-26ca9e7673fb|PROD-0427 |43398.34    |NULL      |upi           |success  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|97187668-1f34-446c-b5f9-da599ef86bef|a3bfebaf-e72e-4a69-946d-32a4e1551596|PROD-0452 |9646.28     |NULL      |upi           |refunded |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|16bc1fb3-6425-40bf-912b-3e2d89986b38|161733db-9842-41e4-ac47-d52da5aef9df|PROD-0211 |46520.03    |NULL      |cash          |success  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5a899f66-87d9-468b-bb39-871c4df270d7|660712ff-b4bc-422f-8041-827149a004fb|PROD-0166 |1,200       |NULL      |cd            |success  |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|cdf38a86-d52a-4fe0-aa5f-7687d01a69b9|ce6e1480-a47b-48f8-9bb4-35e15b84bcaf|PROD-0020 |11407.37    |NULL      |card          |success  |-3      |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+----------+--------------+---------+--------+--------------------------+------------------------------------------+
+only showing top 10 rows
+
+
+----- condition : Column<'trim(order_date) LIKE %/%'> ---> 36062 lignes -----
++------------------------------------+------------------------------------+----------+------------+----------------+--------------+-------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date      |payment_method|status |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+----------------+--------------+-------+--------+--------------------------+------------------------------------------+
+|5b10b856-e084-471c-bc16-8dbab95e3f33|9e48263f-7923-4cb9-8138-b9da8eb85619|PROD-0393 |17796.32    |2024/31/01      |card          |success|1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|8fc20b6f-fbd2-4d34-b935-ae0e375aad80|9186ed0d-0297-4355-ae7f-a332ce8fd46f|PROD-0399 |41711.08    |2025/01/10 12:00|card          |SUCCESS|3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|84a34bc6-02af-4949-ac03-1f72731f7881|a58d0abc-c79e-4a7d-8b55-95eca158e786|PROD-0435 |-50         |2024/31/01      |cash          |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d3eace5e-c606-4bea-891f-8e7ebf73680d|ec1c37ed-a259-432b-9c95-b8b01ea78698|PROD-0052 |19892.67    |2025/01/10 12:00|wallet        | FAILED|3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|eca176df-4bad-4fac-ae27-22fcfc667ba1|dea3e352-ff34-404c-9f9a-b545b4e784ee|PROD-0155 |-50         |2024/31/01      |cash          |SUCCESS|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|1e06a8d6-727d-4457-9964-2b1f057b7862|056aca7a-22be-470e-ba30-8249fad83998|PROD-0242 |16754.52    |2024/31/01      |upi           |success|2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|6a36a183-7803-47e0-be37-09ee275863a2|c49c0330-1eda-40bc-bdcc-0ad86fc8ddda|PROD-0429 |29416.72    |2025/01/10 12:00|card          |suc    |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f833258c-c478-4316-99fe-5e9491de9d91|6ed274d7-d2aa-4ff6-84e4-80cecb4667a2|PROD-0235 |40208.72    |2025/01/10 12:00|wallet        |success|        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|cdf39e31-0fa4-463b-8c9d-de486e7bbb76|af197364-9271-43f9-a003-fb122066b96d|PROD-0465 |3542.94     |2024/31/01      |cash          |suc    |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c341e859-92f5-4a62-93be-be9cb34f6a1d|6f38f29a-a92d-4b33-b4e8-9adc4e2b3600|PROD-0413 |1,200       |2024/31/01      |UPI           |Success|        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|2452c622-e852-41c3-a4bd-8b641db25911|38c416a8-6e4f-4788-b77c-6a85aee77332|PROD-0397 | 9902.83    |2025/01/10 12:00|upi           |success|2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|bca8e264-808b-4eb9-9603-090c5be93f3d|2d1bb9fc-edf4-432c-bcaf-7465e193f569|PROD-0120 |14334.98    |2024/31/01      |cash          |SUCCESS|3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|ae3913a2-6a77-47bf-8566-c08b8f426afb|17f4ba8b-f77f-4c76-89ee-7e86be2b7df5|PROD-0243 |33819.63    |2024/31/01      |wallet        |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|21d1e5c9-6266-4a91-b728-db827cf93c9c|12ac898b-6dc6-4c94-9a39-db4bca506e3e|PROD-0214 |25141.94    |2024/31/01      |cash          |success|4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|87fea634-c9ec-4b86-8181-43ca8f804ed8|0b41cd47-b9f4-4871-ae16-c1ac9ab428ec|PROD-0491 |27303.79    |2024/31/01      |cash          |success|        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d959707e-4865-4a36-8c3e-6b43dd9dc0fd|2fef9247-ac00-46a2-bc2f-f14a991038d1|PROD-0128 | 37722.14   |2024/31/01      |cash          |success|5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|83d4e983-ed07-4b16-b8c1-c9d3fc523384|a9555f78-aa03-4280-a5c7-575c40c1c28d|PROD-0075 |-50         |2024/31/01      |upi           |success|5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|dd7509f1-511c-4b6e-a782-310cc90dbfc3|977e8a1b-2faa-4f1a-8721-46d8be000a23|PROD-0128 |37876.69    |2024/31/01      | upi          |success|5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4617ef3f-5cc0-49bf-b79b-0f08076fec15|73944de3-dbac-4ffd-bc85-041fe3b831aa|PROD-0177 |25469.88    |2024/31/01      |cash          |success|2.0     |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d41aa3ac-53d8-4c44-b660-0f4f2a74dc68|5d93570f-0456-4042-8b5c-5ec1105b3200|PROD-0211 |47349.91    |2025/01/10 12:00|card          |success|2.0     |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+----------------+--------------+-------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+----- condition : Column<'trim(order_date) LIKE __-__-____'> ---> 18050 lignes -----
++------------------------------------+------------------------------------+----------+------------+----------+--------------+---------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date|payment_method|status   |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+----------+--------------+---------+--------+--------------------------+------------------------------------------+
+|f96cc758-ee08-48c0-82bb-3b11313afd3e|e4212166-be18-4b65-81c8-8b772e624208|PROD-0113 |25385.07    |31-12-2023|card          |refunded |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|35656b02-741b-4462-93c9-c23a97ac6d42|20dde646-3d7f-4b73-8298-1278dafdcb35|PROD-0186 |29928.21    |31-12-2023|cash          |refunded |0       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|66dc71b0-e4d5-4d45-b182-02a6524a79b8|7ddd54fe-9d60-45ef-add4-6560ea3f65f1|PROD-0276 |9276.56     |31-12-2023|WALLET        |REF      |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|01ea6969-cb6e-4ec0-8aa1-5e6b23e0efac|f132ad2e-f48a-4f09-923f-ef7ee5759f85|PROD-0285 |45057.13    |31-12-2023|cash          |success  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e83bbeb3-85d6-4a0c-96f3-f87cbcd11044|142df004-ac5f-4222-bf37-f772ddbbcc6a|PROD-0111 |5485.05     |31-12-2023|wall-et       |success  |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|be8a2c71-2a1e-4b75-bb87-bf6cc0af96d2|2b8adb23-d7d7-460f-852c-55220a20a4c8|PROD-0199 |17817.5     |31-12-2023|c@rd          |success  |-3      |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f29959f6-1a36-4944-ad20-67f06d87e7f3|34a5f23b-a411-4cc4-84e9-6b08cc3171f5|PROD-0211 |42779.81    |31-12-2023|wallet        |success  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4925fac8-3b72-445f-8146-86a0b5f53b7e|080b6fc9-2f1e-4db2-a26a-b45cb8de4251|PROD-0498 | 42489.07   |31-12-2023|upi           |success  |five    |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|b69c4c53-a5f6-4042-9be5-30dd99e9fbf4|3e5f5257-a9f6-4fe1-a100-0ec2a9b92ba6|PROD-0158 |32310.73    |31-12-2023|upi           |success  |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4d36c2a5-a1b6-4943-a5be-e09e680e6262|6f8b91a2-fd86-4790-8fb5-a3f46b7d7e06|PROD-0357 | 31272.71   |31-12-2023|card          |SUCCESS  |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|74ceea07-8922-4159-a871-06d351ed4d81|185ca76f-65c6-4220-87f3-2905d438ce22|PROD-0178 |17849.52    |31-12-2023|c@rd          |suc      |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9095da63-9f90-4e12-9c94-6250c41cef3b|03f6c1cc-a8d7-48ff-a61f-f2460a1c9345|PROD-0406 |845.39      |31-12-2023|wallet        |success  |-3      |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|2aeed8da-a9be-4dd8-b9c7-690d2bf9a334|f10f7f53-e83b-4d3f-9ed4-20db0ee070c9|PROD-0257 |0           |31-12-2023|wallet        |success  |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|71528a5e-89c0-41ed-a575-5e7df60e15ec|64f5ce70-04ff-4787-ad16-eb5935899067|PROD-0329 |364830.8    |31-12-2023|cash          |success  |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|76b7e17d-0bc6-46bd-b2ed-3de9fee47708|49904dbc-035d-483b-b9dc-3105f4a63bbf|PROD-0140 |26345.69    |31-12-2023|cash          |SUCCESS  |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5ec678da-e379-46b0-b795-c08b9e780ef5|73d67b5c-6168-42d7-a8d1-69e87c195f84|PROD-0249 |35093.7     |31-12-2023|cash          |success  |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|250e9cf7-d0b8-4cfe-a11a-ebfa9653b103|3da543f8-7551-4785-b603-20e79bc16939|PROD-0340 |45541.73    |31-12-2023|wallet        |Success  |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|0e698bf9-1d6e-4284-b2df-c02561714f60|68fe7de2-b327-46b9-a7af-cdafbba7a551|PROD-0460 |46065.17    |31-12-2023|upi           |suc      |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|9e36bf63-d215-4e1f-8e29-d21fb4a1bffe|8f049bb9-6f51-4611-a8c7-c30e77abb914|PROD-0013 |24081.85    |31-12-2023|card          |success  |2.0     |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|8563602e-5691-43bd-905b-cd1bdcae296a|036e3625-a8a6-4efb-89d0-0d4fd3a7cfe7|PROD-0195 | 46165.08   |31-12-2023|upi           |success  |five    |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+----------+--------------+---------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+----- condition : Column<'trim(order_date) LIKE %:%'> ---> 35926 lignes -----
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+--------+--------+--------------------------+------------------------------------------+
+|order_id                            |customer_id                         |product_id|order_amount|order_date                |payment_method|status  |quantity|_ingested_at              |_source_file                              |
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+--------+--------+--------------------------+------------------------------------------+
+|8fc20b6f-fbd2-4d34-b935-ae0e375aad80|9186ed0d-0297-4355-ae7f-a332ce8fd46f|PROD-0399 |41711.08    |2025/01/10 12:00          |card          |SUCCESS |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|4b5d74d1-91f1-47e8-b0d2-9a68fe92341e|5b8f9a1d-b658-400d-b96a-271150f6c8bf|PROD-0214 |-50         |2026-12-20T15:18:00.441995|card          |refunded|        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d3eace5e-c606-4bea-891f-8e7ebf73680d|ec1c37ed-a259-432b-9c95-b8b01ea78698|PROD-0052 |19892.67    |2025/01/10 12:00          |wallet        | FAILED |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d5c64588-8aa0-42ed-9273-4a0f1c0c4636|c296994a-45b4-4f2d-b754-331374011d5f|PROD-0276 |31629.08    |2026-10-25T15:18:00.713029|cash          |success |5       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|6a36a183-7803-47e0-be37-09ee275863a2|c49c0330-1eda-40bc-bdcc-0ad86fc8ddda|PROD-0429 |29416.72    |2025/01/10 12:00          |card          |suc     |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|35a7d35d-9998-411e-9663-a794e08d3971|cac39caf-175a-41da-8f14-606eee96dd19|PROD-0203 |14991.21    |2026-02-10T15:18:02.953186|wallet        |Success |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|f833258c-c478-4316-99fe-5e9491de9d91|6ed274d7-d2aa-4ff6-84e4-80cecb4667a2|PROD-0235 |40208.72    |2025/01/10 12:00          |wallet        |success |        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|2452c622-e852-41c3-a4bd-8b641db25911|38c416a8-6e4f-4788-b77c-6a85aee77332|PROD-0397 | 9902.83    |2025/01/10 12:00          |upi           |success |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|c3b7c57e-4105-43a8-8f71-453e40b0637b|99f11a8b-3916-423a-93ef-1f3a3086948e|PROD-0201 |5665.0      |2026-11-16T15:17:59.679270|wallet        |success |2       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d41aa3ac-53d8-4c44-b660-0f4f2a74dc68|5d93570f-0456-4042-8b5c-5ec1105b3200|PROD-0211 |47349.91    |2025/01/10 12:00          |card          |success |2.0     |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|66480c35-1f0e-4a4b-b2ad-36f777c63e77|e0f75ed8-5442-4a8b-b339-91df2284e27a|PROD-0119 |775197.14   |2026-10-26T15:18:00.341175|wallet        |success |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5b5c7af4-f493-46d5-b396-d2d7886d674b|133e115a-0acb-45e3-8021-28d89635b78e|PROD-0229 |1,200       |2026-11-17T15:18:01.564286|cash          |success |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|69a24e57-c595-419b-be42-7343ba445375|476f971c-7871-4853-a8cc-8035a529e6bc|PROD-0428 |30733.27    |2026-01-15T15:18:03.200248|cash          |REF     |five    |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|a89e5e2e-cad1-4f4a-825f-87d7f5fd33ec|332bb466-b414-4cb8-9156-32464e7b7d76|PROD-0109 |4485.36     |2026-06-28T15:18:00.536834| upi          |refunded|        |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|e3d503fa-36cb-45d7-bdca-b4ee3e546510|86ad6beb-476d-4d79-bfb6-0f989b8c2c8a|PROD-0043 |25206.65    |2026-03-13T15:18:00.599863|wallet        |fail    |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|bc495c52-3c47-4eef-8958-8a4da32350d9|de05aa36-726a-49f0-9bab-4d4d8054777c|PROD-0086 |7833.61     |2025/01/10 12:00          |wallet        |fail    |4       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|5b07ad2a-5049-4071-a56b-957001f77efd|132b3f00-7152-46fd-bf99-67aca7d7a5fa|PROD-0422 |0           |2026-04-30T15:18:01.386597|upi           |fail    |3       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|34e59d7e-f9b1-45ec-8e41-16adbcdc3f8e|d4f28d83-1459-48f6-8849-3e9ccf9c355b|PROD-0448 |14645.4     |2026-07-24T15:18:00.743830|wallet        |success |1       |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|3c3930f0-37c7-40ac-a9e8-4f61d296918a|d1ef56a7-32ff-4494-b408-a7e419f6f902|PROD-0400 |49648.81    |2025/01/10 12:00          |upi           |success |2.0     |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
+|d37bc222-0bdb-49ee-af63-9479ab2cc8bd|4376ab24-b6f8-4fd7-96b4-322d27119d19|PROD-0389 |33108.96    |2025/01/10 12:00          |wallet        |REF     |-3      |2026-09-27 13:26:26.909115|/opt/app/data/sample/orders_300k_dirty.csv|
++------------------------------------+------------------------------------+----------+------------+--------------------------+--------------+--------+--------+--------------------------+------------------------------------------+
+only showing top 20 rows
+
+
+----- condition : Column<'(count > 1)'> ---> 0 lignes -----
++-----------+----------+------------+----------+--------------+------+--------+-----+
+|customer_id|product_id|order_amount|order_date|payment_method|status|quantity|count|
++-----------+----------+------------+----------+--------------+------+--------+-----+
++-----------+----------+------------+----------+--------------+------+--------+-----+
+

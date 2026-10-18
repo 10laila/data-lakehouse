@@ -1,0 +1,35 @@
+# Secrets
+docker/.env
+*.env
+
+# Python (arrivera à l'étape Spark)
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Données volumineuses (à ne pas versionner sur GitHub)
+data/sample/*
+!data/sample/.gitkeep
+
+# Docker / volumes locaux
+docker/minio_data/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Spark / Iceberg
+spark-warehouse/
+metastore_db/
+derby.log
+*.parquet
+
+# Fichiers temporaires
+*.log
+tmp/
+temp/
+
+# Archives volumineuses
+*.zip

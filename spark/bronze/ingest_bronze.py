@@ -1,6 +1,5 @@
 """
-Lit les fichiers CSV bruts et les écrit tels quels (sans nettoyage) en tables
-Iceberg Bronze. Aucune transformation métier ici : Bronze doit rester le
+Ingère les fichiers CSV dans les tables Iceberg Bronze, sans règles de nettoyage métier. Aucune transformation métier ici : Bronze doit rester le
 miroir fidèle de la source, avec juste des métadonnées de traçabilité en plus.
 """
 

@@ -1,56 +1,59 @@
-# Data Lakehouse from Scratch
+# Data Lakehouse e-commerce
 
-Projet en cours de construction, étape par étape (voir `docs/` pour le détail
-de chaque décision).
+Projet Data Engineering construit autour de **PySpark, Apache Iceberg, MinIO, PostgreSQL et Docker**. Airflow est prévu pour l'orchestration.
 
-## Où on en est
+Le dépôt est organisé selon l'architecture **médaillon** : Bronze (ingestion), Silver (nettoyage) puis Gold (modèles analytiques).
 
-- [x] Cadrage : cas d'usage e-commerce, tables MVP = customers / products / orders
-      (voir `docs/schema_bronze.md`)
-- [x] Squelette du projet
-- [x] `docker-compose.yml` pour MinIO (buckets bronze/silver/gold)
-- [ ] Spark + Iceberg (prochaine étape)
-- [ ] Jobs Bronze
-- [ ] Jobs Silver
-- [ ] Jobs Gold
-- [ ] DAG Airflow
-- [ ] Qualité, partitionnement, schema evolution, time travel
-- [ ] Documentation finale + extensions
+## Avancement
 
-## Démarrer MinIO (première brique à valider seule)
+| Étape | État dans le dépôt |
+| --- | --- |
+| Infrastructure Docker / Spark / Iceberg / MinIO | Configurations présentes ; disponibilité à vérifier localement |
+| Bronze (customers, products, orders) | Code d'ingestion disponible |
+| Profilage Bronze | Scripts génériques et spécialisés disponibles |
+| Silver products / customers / orders | Modules disponibles ; exécution et résultats à valider |
+| Gold | Non implémenté |
+| Airflow | Squelette de DAG seulement, non opérationnel |
+| Tests automatisés des traitements | À implémenter |
 
-```bash
+## Organisation des scripts
+
+- `spark/common/` : construction de la SparkSession (catalogue Iceberg, MinIO).
+- `spark/bronze/ingest_bronze.py` : lecture des CSV et écriture des tables Bronze.
+- `spark/silver/clean_*.py` : transformations par entité ; `run_silver.py` est le point d'entrée.
+- `spark/quality/profiling/` : inspection des données et recherche d'anomalies, principalement dans Bronze.
+- `spark/quality/checks/report_silver.py` : rapport de contrôle **informatif** après traitement Silver (ne fait pas échouer le pipeline).
+- `spark/gold/` et `airflow/dags/` : prochaines étapes non encore développées.
+- `docs/architecture.md` : architecture, flux, décisions et précautions.
+
+## Exécuter les scripts
+
+Pré-requis : Docker Desktop démarré, fichier local `docker/.env` configuré, fichiers CSV placés dans `data/sample/` et buckets/catalogue disponibles. Les commandes suivantes s'exécutent depuis la racine du dépôt sous PowerShell :
+
+```powershell
 cd docker
-docker compose up -d
+docker compose up -d postgres minio iceberg-rest
+
+# Ingestion Bronze : ATTENTION remplace les tables Bronze existantes
+docker compose run --rm spark spark-submit /opt/app/spark/bronze/ingest_bronze.py
+
+# Explorer la table des commandes (lecture seule)
+docker compose run --rm spark spark-submit /opt/app/spark/quality/profiling/profile_orders.py
+
+# Transformer Bronze -> Silver : ATTENTION remplace les tables Silver existantes
+docker compose run --rm spark spark-submit /opt/app/spark/silver/run_silver.py
+
+# Rapport Silver seulement (lecture seule)
+docker compose run --rm spark spark-submit /opt/app/spark/quality/checks/report_silver.py
 ```
 
-Ensuite, vérifie que tout fonctionne **avant de passer à la suite** :
+**Important :** le dépôt GitHub ne contient pas les volumes MinIO ni les données locales. Les scripts utilisent `createOrReplace()` : ne relance pas l'ingestion ou Silver sur des données que tu veux conserver sans sauvegarde préalable.
 
-1. Ouvre la console web : http://localhost:9001
-   - Identifiant : `minioadmin`
-   - Mot de passe : `minioadmin123`
-2. Tu dois voir 3 buckets déjà créés : `bronze`, `silver`, `gold`
-   (créés automatiquement par le service `minio-init`).
-3. Si les buckets n'apparaissent pas, regarde les logs :
-   ```bash
-   docker compose logs minio-init
-   ```
+## À améliorer ensuite
 
-Pourquoi valider MinIO seul avant d'ajouter Spark ? Parce que si un problème
-de connexion apparaît plus tard, tu sauras immédiatement que ça ne vient pas
-du stockage — il aura déjà été testé indépendamment. C'est une règle générale
-utile pour tout le projet : ne jamais ajouter un composant sans avoir validé
-le précédent isolément.
+- Vérifier les schémas Bronze : l'ingestion actuelle utilise `inferSchema=True`, malgré un contrat documentaire prévoyant du texte brut pour les colonnes sales.
+- Ajouter des tests automatiques des règles de qualité et des transformations.
+- Construire la couche Gold et son DAG Airflow.
+- Remplacer les identifiants de développement codés en dur dans `spark/common/spark_session.py` par des variables d'environnement.
 
-## Arrêter / nettoyer
-
-```bash
-docker compose down          # arrête les conteneurs, garde les données
-docker compose down -v       # arrête et supprime aussi le volume MinIO
-```
-
-## Prochaine étape
-
-Une fois les 3 buckets confirmés visibles dans la console MinIO : mise en
-place de Spark avec les jars Iceberg + S3A (config déjà pré-remplie dans
-`config/settings.yaml`, versions à figer précisément à ce moment-là).
+Voir `docs/architecture.md` et `docs/schema_bronze.md` pour plus de détails.

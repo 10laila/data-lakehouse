@@ -227,10 +227,7 @@ def clean_orders(spark):
     print("\n--- Schéma de silver.orders avant écriture ---")
     cleaned.printSchema()
 
-    cleaned.writeTo("silver.orders") \
-    .using("iceberg") \
-    .createOrReplace()
-    
+    cleaned.writeTo("silver.orders").using("iceberg").createOrReplace()
     print("Table silver.orders créée ou remplacée avec succès.\n")
 
 if __name__ == "__main__":

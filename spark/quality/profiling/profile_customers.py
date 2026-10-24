@@ -1,173 +1,287 @@
 """
-Profilage de bronze.customers : cherche les anomalies AVANT d'écrire le nettoyage Silver.
+Profilage de bronze.customers : détecter les anomalies avant le nettoyage Silver.
 Lecture seule : aucune table n'est modifiée.
-Le profilage générique (manquants, formes, doublons) passe par profile_table.py ;
-ici, seulement les contrôles propres aux clients.
+Le profilage générique (valeurs manquantes, formes, doublons simples) reste dans
+profile_table.py ; ce fichier contient les contrôles spécifiques aux clients.
 """
 
 import sys
 
 sys.path.append("/opt/app/spark")
+
 from common.spark_session import get_spark_session
 from pyspark.sql import functions as F
 
 
+UUID_PATTERN = (
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+)
+
+
+def _col(name):
+    """Permet de référencer aussi les colonnes dont le nom contient des caractères spéciaux."""
+    return F.col("`" + name.replace("`", "``") + "`")
+
+
 def profile_names(df):
-    for col in ["first_name", "last_name"]:
-        c = F.col(col)
-        # espaces_autour : la valeur change quand on enlève les espaces
-        # casse_irreguliere : la valeur diffère de sa version "Majuscule Initiale"
-        #   (peut donner de faux positifs sur "Jean-Pierre" ou "O'Neil")
-        # lettres_doublees : deux paires de lettres doublées de suite, comme "KKee"
-        #   (\1 et \2 rappellent les lettres capturées par les deux (.) du motif)
-        stats = df.select(
-            F.sum((c != F.trim(c)).cast("int")).alias("espaces_autour"),
-            F.sum((c != F.initcap(F.lower(c))).cast("int")).alias("casse_irreguliere"),
-            F.sum(F.lower(c).rlike(r"(.)\1(.)\2").cast("int")).alias("lettres_doublees"),
+    """Mesure les espaces, la casse et les répétitions de lettres candidates."""
+    for column_name in ["first_name", "last_name"]:
+        c = _col(column_name)
+        repeated_pair_pattern = r"(\p{L})\1(\p{L})\2"
+
+        stats = df.agg(
+            F.sum(
+                F.when(c.isNotNull() & (c != F.trim(c)), 1).otherwise(0)
+            ).alias("espaces_autour"),
+            F.sum(
+                F.when(
+                    c.isNotNull()
+                    & (c != F.initcap(F.lower(F.trim(c)))),
+                    1,
+                ).otherwise(0)
+            ).alias("casse_non_standard"),
+            F.sum(
+                F.when(
+                    F.lower(c).rlike(repeated_pair_pattern),
+                    1,
+                ).otherwise(0)
+            ).alias("candidats_lettres_doublees"),
         )
-        print(f"--- {col} ---")
+
+        print(f"\n--- Profilage de {column_name} ---")
         stats.show(truncate=False)
-        print(f"Exemples de {col} avec lettres doublées :")
-        # On affiche l'email à côté : il sert à vérifier le vrai prénom/nom.
-        df.filter(F.lower(c).rlike(r"(.)\1(.)\2")).select(col, "email").show(
-            8, truncate=False
+
+        print(f"Exemples de {column_name} avec deux paires de lettres répétées :")
+        (
+            df.filter(F.lower(c).rlike(repeated_pair_pattern))
+            .select(_col(column_name), _col("email"))
+            .show(10, truncate=False)
         )
 
 
 def profile_emails(df):
-    # Regex simple de validité : texte@domaine.extension
-    valide = F.col("email").rlike(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
-    # On ne teste que les emails non NULL : les manquants sont comptés par profile_table.py.
-    invalides = df.filter(F.col("email").isNotNull() & ~valide)
-    print(f"--- Emails invalides : {invalides.count()} ---")
-    invalides.select("email").show(10, truncate=False)
-    # Emails qui changent quand on les met en minuscules et sans espaces
-    n_maj = df.filter(F.col("email") != F.lower(F.trim(F.col("email")))).count()
-    print(f"Emails avec majuscules ou espaces : {n_maj}")
+    """Repère les emails mal formés et ceux dont la casse/les espaces varient."""
+    email = F.trim(_col("email").cast("string"))
+    email_pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+
+    invalides = df.filter(
+        email.isNotNull()
+        & (email != "")
+        & (~email.rlike(email_pattern))
+    )
+
+    print(f"\n--- Emails non vides au format invalide : {invalides.count()} ---")
+    invalides.select("email").show(20, truncate=False)
+
+    non_normalises = df.filter(
+        _col("email").isNotNull()
+        & (_col("email").cast("string") != F.lower(email))
+    )
+    print(
+        "Emails contenant des majuscules ou des espaces autour : "
+        f"{non_normalises.count()}"
+    )
+    non_normalises.select("email").show(10, truncate=False)
 
 
 def profile_dates(df):
-    # dob et signup_date sont déjà de type "date" dans Bronze : pas besoin de les convertir.
-    # Les valeurs illisibles du CSV ont été transformées en NULL à l'ingestion ;
-    # leur nombre est visible dans les valeurs manquantes de profile_table.py.
-    dob = F.col("dob")
-    signup = F.col("signup_date")
-    # Âge du client le jour de son inscription, en années (datediff donne des jours).
-    age_inscription = F.datediff(signup, dob) / 365.25
-    print("--- Dates ---")
+    """Contrôle les dates et l'âge calculé à la date d'inscription."""
+    dob = F.to_date(_col("dob"))
+    signup = F.to_date(_col("signup_date"))
+    age_at_signup = F.datediff(signup, dob) / F.lit(365.25)
+
+    print("\n--- Profilage des dates client ---")
     df.select(
         F.min(dob).alias("dob_min"),
         F.max(dob).alias("dob_max"),
         F.min(signup).alias("signup_min"),
         F.max(signup).alias("signup_max"),
-        # Inscription avant la naissance : forcément une erreur
-        F.sum((signup < dob).cast("int")).alias("signup_avant_naissance"),
-        # Inscription dans le futur : erreur aussi
-        F.sum((signup > F.current_date()).cast("int")).alias("signup_dans_le_futur"),
-        # Âge le jour de l'inscription : les valeurs extrêmes signalent des anomalies
-        F.round(F.min(age_inscription), 1).alias("age_inscription_min"),
-        F.round(F.max(age_inscription), 1).alias("age_inscription_max"),
-        # Nombre de clients qui avaient moins de 18 ans à l'inscription
-        F.sum((age_inscription < 18).cast("int")).alias("mineurs_a_l_inscription"),
+        F.sum(
+            F.when(
+                dob.isNotNull() & signup.isNotNull() & (signup < dob),
+                1,
+            ).otherwise(0)
+        ).alias("signup_avant_naissance"),
+        F.sum(
+            F.when(signup > F.current_date(), 1).otherwise(0)
+        ).alias("signup_dans_le_futur"),
+        F.round(F.min(age_at_signup), 1).alias("age_inscription_min"),
+        F.round(F.max(age_at_signup), 1).alias("age_inscription_max"),
+        F.sum(
+            F.when(age_at_signup < 18, 1).otherwise(0)
+        ).alias("mineurs_a_l_inscription"),
+        F.sum(
+            F.when(age_at_signup < 0, 1).otherwise(0)
+        ).alias("ages_negatifs_a_l_inscription"),
     ).show(truncate=False, vertical=True)
 
 
 def profile_devices(df):
-    # Le nom exact de la colonne (device_id(s)) peut varier : on la retrouve par son début.
-    device_col = next(c for c in df.columns if c.startswith("device"))
-    # split sépare sur ";" et size compte les éléments (-1 si la valeur est NULL)
-    nb = F.size(F.split(F.col(device_col), ";"))
-    print(f"--- Nombre d'appareils par client ({device_col}) ---")
-    df.groupBy(nb.alias("nb_appareils")).count().orderBy("nb_appareils").show()
+    """Compte les appareils par client sans compter les segments vides."""
+    if "device_id(s)" in df.columns:
+        device_column = "device_id(s)"
+    else:
+        device_column = next(
+            (column for column in df.columns if column.startswith("device")),
+            None,
+        )
+
+    if device_column is None:
+        print("\nAucune colonne d'appareils trouvée ; profilage ignoré.")
+        return
+
+    device_text = F.trim(_col(device_column).cast("string"))
+    split_values = F.split(device_text, ";")
+    nonempty_values = F.filter(split_values, lambda value: F.trim(value) != "")
+    device_count = (
+        F.when(device_text.isNull() | (device_text == ""), 0)
+        .otherwise(F.size(nonempty_values))
+    )
+
+    print(f"\n--- Nombre d'appareils par client ({device_column}) ---")
+    (
+        df.groupBy(device_count.alias("nb_appareils"))
+        .count()
+        .orderBy("nb_appareils")
+        .show(truncate=False)
+    )
+
+    empty_devices = df.filter(device_text.isNull() | (device_text == ""))
+    print(f"Clients sans identifiant d'appareil renseigné : {empty_devices.count()}")
+
 
 def profile_customer_duplicates(spark):
-    # Colonnes "métier" uniquement : on exclut _ingested_at et _source_file, qui peuvent
-    # différer entre deux lignes sans que le client ait changé.
-    cols = ["first_name", "last_name", "email", "phone_number", "gender", "dob",
-            "signup_date", "address", "city", "state", "country", "`device_id(s)`", "source"]
-    # On convertit chaque colonne en texte puis on les assemble avec "|" : cette chaîne
-    # sert d'"empreinte". Deux lignes identiques ont la même empreinte.
-    empreinte = "concat_ws('|', " + ", ".join(f"CAST({c} AS STRING)" for c in cols) + ")"
+    """Distingue les copies exactes des lignes contradictoires pour un même customer_id."""
+    df = spark.table("bronze.customers")
 
-    print("\n--- 1. Format des customer_id (UUID attendu) ---")
-    # {8}, {4}, {12} = nombre exact de caractères hexadécimaux dans chaque bloc
-    spark.sql("""
-        SELECT COUNT(*) AS id_invalides
-        FROM bronze.customers
-        WHERE NOT (customer_id RLIKE
-            '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$')
-    """).show()
+    print("\n--- 1. Format des customer_id (UUID en minuscules attendu) ---")
+    customer_id = F.trim(_col("customer_id").cast("string"))
+    invalid_ids = df.filter(
+        customer_id.isNull()
+        | (customer_id == "")
+        | (~customer_id.rlike(UUID_PATTERN))
+    )
+    print(f"Identifiants absents ou ne respectant pas le format UUID minuscule : {invalid_ids.count()}")
+    invalid_ids.select("customer_id").show(10, truncate=False)
 
-    print("\n--- 2. Les customer_id en doublon : copies exactes ou versions différentes ? ---")
-    # nb_lignes = combien de lignes pour cet id ; nb_versions = combien d'empreintes différentes.
-    # nb_versions = 1 -> copies exactes. nb_versions > 1 -> les lignes se contredisent.
-    spark.sql(f"""
-        WITH groupes AS (
-            SELECT customer_id,
-                   COUNT(*) AS nb_lignes,
-                   COUNT(DISTINCT {empreinte}) AS nb_versions
-            FROM bronze.customers
-            GROUP BY customer_id
-            HAVING COUNT(*) > 1
+    uppercase_ids = df.filter(
+        customer_id.isNotNull()
+        & (customer_id != F.lower(customer_id))
+    )
+    print(f"Identifiants contenant des majuscules : {uppercase_ids.count()}")
+
+    # Les colonnes techniques d'ingestion sont exclues de l'empreinte.
+    business_columns = [
+        "first_name",
+        "last_name",
+        "email",
+        "phone_number",
+        "gender",
+        "dob",
+        "signup_date",
+        "address",
+        "city",
+        "state",
+        "country",
+        "device_id(s)",
+        "source",
+    ]
+    available_columns = [name for name in business_columns if name in df.columns]
+    missing_columns = [name for name in business_columns if name not in df.columns]
+    if missing_columns:
+        print(f"Colonnes absentes de Bronze, exclues de l'empreinte : {missing_columns}")
+
+    # JSON structuré plutôt qu'une concaténation avec séparateur : les valeurs NULL
+    # et les caractères "|" dans les données ne créent pas de fausses égalités.
+    fingerprint = F.to_json(
+        F.struct(*[_col(name).alias(name) for name in available_columns]),
+        {"ignoreNullFields": "false"},
+    )
+
+    with_fingerprint = df.withColumn("_fingerprint", fingerprint)
+    nonempty_ids = with_fingerprint.filter(
+        _col("customer_id").isNotNull()
+        & (F.trim(_col("customer_id").cast("string")) != "")
+    )
+
+    duplicate_groups = (
+        nonempty_ids.groupBy("customer_id")
+        .agg(
+            F.count(F.lit(1)).alias("nb_lignes"),
+            F.countDistinct("_fingerprint").alias("nb_versions"),
         )
-        SELECT nb_lignes, nb_versions, COUNT(*) AS nb_clients
-        FROM groupes
-        GROUP BY nb_lignes, nb_versions
-        ORDER BY nb_lignes, nb_versions
-    """).show(truncate=False)
+        .filter(F.col("nb_lignes") > 1)
+    )
+
+    print("\n--- 2. Répartition des groupes de customer_id dupliqués ---")
+    duplicate_groups.groupBy("nb_lignes", "nb_versions").count().orderBy(
+        "nb_lignes", "nb_versions"
+    ).show(truncate=False)
+
+    exact_copies = duplicate_groups.filter(F.col("nb_versions") == 1).count()
+    conflicts = duplicate_groups.filter(F.col("nb_versions") > 1)
+    conflict_count = conflicts.count()
+    print(f"Groupes de copies exactes : {exact_copies}")
+    print(f"Groupes avec versions contradictoires : {conflict_count}")
 
     print("\n--- 3. Exemples de clients dont les lignes se contredisent ---")
-    spark.sql(f"""
-        WITH conflits AS (
-            SELECT customer_id
-            FROM bronze.customers
-            GROUP BY customer_id
-            HAVING COUNT(DISTINCT {empreinte}) > 1
-            LIMIT 5
-        )
-        SELECT customer_id, first_name, last_name, email, phone_number,
-               dob, signup_date, city, source
-        FROM bronze.customers
-        WHERE customer_id IN (SELECT customer_id FROM conflits)
-        ORDER BY customer_id
-    """).show(30, truncate=False)
+    conflict_ids = conflicts.select("customer_id").limit(5)
+    display_columns = [
+        name for name in [
+            "customer_id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+            "dob",
+            "signup_date",
+            "city",
+            "source",
+        ] if name in df.columns
+    ]
+    (
+        df.join(conflict_ids, on="customer_id", how="inner")
+        .select(*display_columns)
+        .orderBy("customer_id")
+        .show(30, truncate=False)
+    )
 
-    print("\n--- 4. Emails répétés : partagés ou simples copies ? ---")
-    # email_type_shared : l'email commence par "shared"
-    # plusieurs_clients : l'email est utilisé par plusieurs customer_id différents
-    # Lecture : (shared, plusieurs clients) = emails partagés ;
-    #           (non shared, un seul client)  = simple effet des lignes dupliquées ;
-    #           (non shared, plusieurs clients) = cas à regarder de plus près.
-    spark.sql("""
-        WITH emails_repetes AS (
-            SELECT lower(trim(email)) AS email_norm,
-                   COUNT(DISTINCT customer_id) AS nb_clients
-            FROM bronze.customers
-            WHERE email IS NOT NULL
-            GROUP BY lower(trim(email))
-            HAVING COUNT(*) > 1
+    print("\n--- 4. Emails utilisés par plusieurs customer_id distincts ---")
+    email_norm = F.lower(F.trim(_col("email").cast("string")))
+    repeated_emails = (
+        df.withColumn("_email_norm", email_norm)
+        .filter(
+            F.col("_email_norm").isNotNull()
+            & (F.col("_email_norm") != "")
+            & _col("customer_id").isNotNull()
         )
-        SELECT (email_norm LIKE 'shared%') AS email_type_shared,
-               (nb_clients > 1) AS plusieurs_clients,
-               COUNT(*) AS nb_emails
-        FROM emails_repetes
-        GROUP BY 1, 2
-        ORDER BY 1, 2
-    """).show(truncate=False)
+        .groupBy("_email_norm")
+        .agg(F.countDistinct("customer_id").alias("nb_clients"))
+        .filter(F.col("nb_clients") > 1)
+        .withColumn(
+            "email_type_shared",
+            F.col("_email_norm").startswith("shared"),
+        )
+    )
+
+    repeated_emails.groupBy("email_type_shared").count().show(truncate=False)
+    repeated_emails.orderBy(F.desc("nb_clients")).show(20, truncate=False)
+
 
 def main():
     spark = get_spark_session("profile-customers")
-    df = spark.table("bronze.customers")
+    try:
+        df = spark.table("bronze.customers")
+        print("\n--- Schéma de bronze.customers ---")
+        df.printSchema()
 
-    # Les doublons d'abord : c'est ce qui décide de la suite du nettoyage.
-    profile_customer_duplicates(spark)
-
-    profile_names(df)
-    profile_emails(df)
-    profile_dates(df)
-    profile_devices(df)
-
-    spark.stop()
+        profile_customer_duplicates(spark)
+        profile_names(df)
+        profile_emails(df)
+        profile_dates(df)
+        profile_devices(df)
+    finally:
+        spark.stop()
 
 
 if __name__ == "__main__":

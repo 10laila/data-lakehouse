@@ -21,7 +21,7 @@ def get_spark_session(app_name: str = "lakehouse") -> SparkSession:
         )
         .config("spark.sql.catalog.lakehouse.type", "rest")
         .config("spark.sql.catalog.lakehouse.uri", "http://iceberg-rest:8181")
-        .config("spark.sql.catalog.lakehouse.warehouse", "s3://warehouse/")
+        .config("spark.sql.catalog.lakehouse.warehouse", "s3://warehouse/") #Elle indique à Spark d'utiliser le bucket warehouse comme emplacement de stockage par défaut du catalogue.
         .config(
             "spark.sql.catalog.lakehouse.io-impl",
             "org.apache.iceberg.aws.s3.S3FileIO",

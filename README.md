@@ -12,7 +12,7 @@ Le dépôt est organisé selon l'architecture **médaillon** : Bronze (ingestion
 | Bronze (customers, products, orders) | Code d'ingestion disponible |
 | Profilage Bronze | Scripts génériques et spécialisés disponibles |
 | Silver products / customers / orders | Modules disponibles ; exécution et résultats à valider |
-| Gold | Non implémenté |
+| Gold | Six tables analytiques Iceberg implémentées ; exécution locale validée. |
 | Airflow | Squelette de DAG seulement, non opérationnel |
 | Tests automatisés des traitements | À implémenter |
 
@@ -23,7 +23,7 @@ Le dépôt est organisé selon l'architecture **médaillon** : Bronze (ingestion
 - `spark/silver/clean_*.py` : transformations par entité ; `run_silver.py` est le point d'entrée.
 - `spark/quality/profiling/` : inspection des données et recherche d'anomalies, principalement dans Bronze.
 - `spark/quality/checks/report_silver.py` : rapport de contrôle **informatif** après traitement Silver (ne fait pas échouer le pipeline).
-- `spark/gold/` et `airflow/dags/` : prochaines étapes non encore développées.
+- `spark/gold/gold_jobs.py` : Construire les tables analytiques Gold.
 - `docs/architecture.md` : architecture, flux, décisions et précautions.
 
 ## Exécuter les scripts
@@ -45,6 +45,10 @@ docker compose run --rm spark spark-submit /opt/app/spark/silver/run_silver.py
 
 # Rapport Silver seulement (lecture seule)
 docker compose run --rm spark spark-submit /opt/app/spark/quality/checks/report_silver.py
+
+# Construire les tables analytiques Gold
+docker compose run --rm spark spark-submit /opt/app/spark/gold/gold_jobs.py
+#cette commande remplace les tables Gold existantes lors d’une nouvelle exécution.
 ```
 
 **Important :** le dépôt GitHub ne contient pas les volumes MinIO ni les données locales. Les scripts utilisent `createOrReplace()` : ne relance pas l'ingestion ou Silver sur des données que tu veux conserver sans sauvegarde préalable.
